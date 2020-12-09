@@ -7,12 +7,17 @@
 #include"Bullet.h"
 #include"Enemy.h"
 #include <Windows.h>
+#include"GameState.h"
+#include"MainMenuState.h"
 
 class Game
 {
 private:
 	//Window
 	sf::RenderWindow* window;
+
+
+
 
 	//Resources
 	std::map<std::string, sf::Texture*> textures;
@@ -58,8 +63,12 @@ public:
 	virtual ~Game();
 
 	//Functions
+
+	//core
 	void run();
 
+
+	//update
 	void updatePollEvents();
 	void updateInput();
 	void updateGUI();
@@ -70,6 +79,8 @@ public:
 	void updateCombat();
 	void update();
 
+
+	//render
 	void renderGUI();
 	void renderWorld();
 	void render();

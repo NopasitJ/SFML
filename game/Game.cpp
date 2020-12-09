@@ -11,6 +11,7 @@ void Game::initWindow()
 	this->window->setVerticalSyncEnabled(false);
 }
 
+
 void Game::initTextures()
 {
 	this->textures["BULLET"] = new sf::Texture();
@@ -97,8 +98,6 @@ Game::Game()
 
 Game::~Game()
 {
-	delete this->window;
-	delete this->player;
 
 	//Delete textures
 	for (auto& i : this->textures)
@@ -328,6 +327,8 @@ void Game::update()
 	this->updateGUI();
 
 	this->updateWorld();
+
+
 }
 
 void Game::renderGUI()
