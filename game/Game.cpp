@@ -3,6 +3,7 @@
 #include <iostream>
 using namespace sf;
 
+
 //Private functions
 void Game::initWindow()
 {
@@ -58,10 +59,8 @@ void Game::initGUI()
 
 void Game::initWorld()
 {
-	if (!this->worldBackgroundTex.loadFromFile("pic/unnamed.jpg"))
-	{
-		std::cout << "ERROR::GAME::COULD NOT LOAD BACKGROUND TEXTURE" << "\n";
-	}
+	this->worldBackgroundTex.loadFromFile("pic/unnamed.jpg");
+	
 
 	this->worldBackground.setTexture(this->worldBackgroundTex);
 	this->worldBackground.scale(1.7f,2.2f);
@@ -137,16 +136,20 @@ void Game::updatePollEvents()
 	sf::Event e;
 	while (this->window->pollEvent(e))
 	{
+		
 		if (e.Event::type == sf::Event::Closed)
 			this->window->close();
-		if (e.Event::KeyPressed && e.Event::key.code == sf::Keyboard::Escape)
-			this->window->close();
+		if (e.Event::KeyPressed && e.Event::key.code == sf::Keyboard::Escape){
+		this->window->close();
+		state = 1;
+		}
 	}
 }
 
 void Game::updateInput()
 {
 	//Move player
+	
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		this->player->move(-3.f, 0.f);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
@@ -247,7 +250,7 @@ void Game::updateBullets()
 			delete this->bullets.at(counter);
 			this->bullets.erase(this->bullets.begin() + counter);
 		}
-
+		
 		++counter;
 	}
 }
@@ -371,3 +374,4 @@ void Game::render()
 
 	this->window->display();
 }
+

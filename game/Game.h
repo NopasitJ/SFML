@@ -7,14 +7,16 @@
 #include"Bullet.h"
 #include"Enemy.h"
 #include <Windows.h>
-#include"GameState.h"
-#include"MainMenuState.h"
 
 class Game
 {
 private:
 	//Window
+	sf::RenderWindow* window2;
+	
 	sf::RenderWindow* window;
+
+
 
 
 
@@ -49,19 +51,22 @@ private:
 	std::vector<Enemy*> enemies;
 
 	//Private functions
+	
 	void initWindow();
 	void initTextures();
 	void initGUI();
 	void initWorld();
 	void initSystems();
+	
 
 	void initPlayer();
 	void initEnemies();
+	void item();
 
 public:
 	Game();
 	virtual ~Game();
-
+	int state;
 	//Functions
 
 	//core
