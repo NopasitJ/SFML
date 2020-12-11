@@ -1,10 +1,40 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include<SFML/Graphics.hpp>
 #include"Game.h"
 #include<time.h>
+#include<SFML/Audio.hpp>
 using namespace sf;
 using namespace std;
 int main()
 {
+    
+    Font font;
+    char temp[255] = {};
+    int score[6] = {};
+    string name[6] = {};
+    vector <pair<int, string >> userScore;
+    FILE* fp;
+    //high score
+    {
+        font.loadFromFile("fonts/Blockbuster.ttf");
+        fp = fopen("States/Score.txt", "r");
+        for (int i = 0; i < 5; i++)
+        {
+            fscanf(fp, "%s", &temp);
+            name[i] = temp;
+            fscanf(fp, "%d", &score[i]);
+            userScore.push_back(make_pair(score[i], name[i]));
+            //cout << temp << " " << score;
+        }
+    }
+    /// /////
+    name[5] = "teeee";
+    score[5] = 5;
+    /////
+    userScore.push_back(make_pair(score[5], name[5]));
+    sort(userScore.begin(), userScore.end());
+    fclose(fp);
+
 
     sf::RenderWindow window2(sf::VideoMode(800, 600), "WTF");
     sf::CircleShape collision(100.f);
@@ -35,11 +65,19 @@ int main()
     sbtexit.setTexture(&btnexitTexture);
     back.setTexture(&backTexture);
 
+    //sound
+    sf::Music mainmenuSound;
+    if (!mainmenuSound.openFromFile("sound/Battleship.ogg"))
+    {
+        cout << "cant open music" << endl;
+    }
 
 
     while (1)
     {
-        int state = 0;
+        mainmenuSound.setLoop(true);
+        mainmenuSound.play();
+        bool state = 0;
         std::cout << state << std::endl;
         if (state == 0)
         {
@@ -103,6 +141,7 @@ int main()
                         break;
                     }
                 }
+                //window2.close();
                 
             }
             if (state == 1)

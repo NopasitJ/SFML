@@ -1,5 +1,6 @@
 #include "Game.h"
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <iostream>
 using namespace sf;
 
@@ -82,6 +83,7 @@ void Game::initEnemies()
 	this->spawnTimer = this->spawnTimerMax;
 }
 
+
 //Con/Des
 Game::Game()
 {
@@ -122,6 +124,13 @@ void Game::run()
 {
 	while (this->window->isOpen())
 	{
+		sf::Music ingameMusic;
+		if (!ingameMusic.openFromFile("sound/battleShip.ogg"))
+		{
+			std::cout << "In game musc error" << std::endl;
+		}
+		ingameMusic.setLoop(true);
+		ingameMusic.play();
 		this->updatePollEvents();
 
 		if (this->player->getHp() > 0)

@@ -61,12 +61,15 @@ private:
 
 	void initPlayer();
 	void initEnemies();
-	void item();
+	
+
+
 
 public:
 	Game();
 	virtual ~Game();
-	int state;
+	bool state;
+
 	//Functions
 
 	//core
