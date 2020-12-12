@@ -7,7 +7,7 @@ void Enemy::initVariables()
 	this->speed = static_cast<float>(this->pointCount / 3);
 	this->hpMax = static_cast<int>(this->pointCount);
 	this->hp = this->hpMax;
-	this->damage = this->pointCount;
+	this->damage = this->pointCount * 2;
 	this->points = this->pointCount;
 }
 

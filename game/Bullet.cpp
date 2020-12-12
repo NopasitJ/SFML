@@ -11,7 +11,7 @@ Bullet::Bullet(sf::Texture* texture, float pos_x, float pos_y, float dir_x, floa
 	this->shape.setPosition(pos_x, pos_y);
 	this->direction.x = dir_x;
 	this->direction.y = dir_y;
-	this->movementSpeed = movement_speed;
+	this->movementSpeed = movement_speed / 1.5;
 }
 Bullet::~Bullet()
 {

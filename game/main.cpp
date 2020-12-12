@@ -110,7 +110,7 @@ int main()
     sf::Sound mainmenuSong;
     mainmenuSong.setLoop(true);
     mainmenuSong.setBuffer(mainmenuSound);
-    mainmenuSong.play();
+    //mainmenuSong.play();
     int state = 0;
     while (1)
     {
@@ -154,7 +154,7 @@ int main()
         }
             if (state == 0)
             {
-
+                mainmenuSong.play();
                 while (window2.pollEvent(event))
                 {
                     switch (event.type)
@@ -249,7 +249,7 @@ int main()
             }
             if (state == 1)
             {
-                mainmenuSong.stop();
+                mainmenuSong.pause();
 
                 Game game;
                 game.run();

@@ -30,7 +30,7 @@ void Game::initTextures()
 void Game::initGUI()
 {
 	//Load font
-	if (!this->font.loadFromFile("Fonts/PixellettersFull.ttf"))
+	if (!this->font.loadFromFile("Fonts/HELLO.ttf"))
 		std::cout << "ERROR::GAME::Failed to load font" << "\n";
 
 	//Init point text
@@ -202,7 +202,6 @@ void Game::updateInput()
 
 			this->player->getPos().y - this->player->getBounds().height * 10 / 125.f, 0.f, -1.f, 5.f));
 
-
 	}
 
 
@@ -236,7 +235,7 @@ void Game::updateCollision()
 	//Right world collison
 	else if (this->player->getBounds().left + this->player->getBounds().width >= this->window->getSize().x + 80.f)
 	{
-		this->player->setPosition(this->window->getSize().x - this->player->getBounds().width + 80.f, this->player->getBounds().top);
+		this->player->setPosition(this->window->getSize().x - this->player->getBounds().width+70 , this->player->getBounds().top);
 	}
 
 	//Top world collision
