@@ -72,7 +72,7 @@ int main()
     //menu background
 
     Texture btnplayTexture, backTexture, btnscoreTexture, btnexitTexture;
-    Texture returnTexture;
+    Texture returnTexture, enterTexture;
 
     RectangleShape btnplay(Vector2f(354.0f / 2, 95.0f / 1.5));
     RectangleShape sbtnplay(Vector2f(354.0f / 2 * 1.2, 95.0f / 1.5 * 1.2));
@@ -82,14 +82,15 @@ int main()
     RectangleShape sbtexit(Vector2f(354.0f / 2 * 1.2, 94.0f / 1.5 * 1.2));
     RectangleShape back(Vector2f(1400.0f, 700.0f));
     RectangleShape btnreturn(Vector2f(556.0f / 8, 572.0f / 10)), sbtnreturn(Vector2f(556.0f / 8 * 1.2, 572.0f / 10 * 1.2));
-   
+    RectangleShape btnenter(Vector2f(822.0f / 5, 69.0f / 5));
     //load pic
     btnplayTexture.loadFromFile("pic/start.png");
     btnscoreTexture.loadFromFile("pic/score.png");
     btnexitTexture.loadFromFile("pic/exit.png");
     backTexture.loadFromFile("pic/eiei.jpg");
     returnTexture.loadFromFile("pic/return.png");
-
+    enterTexture.loadFromFile("pic/Enter.png");
+    
     btnplay.setTexture(&btnplayTexture);
     sbtnplay.setTexture(&btnplayTexture);
     btnscore.setTexture(&btnscoreTexture);
@@ -99,6 +100,7 @@ int main()
     back.setTexture(&backTexture);
     btnreturn.setTexture(&returnTexture);
     sbtnreturn.setTexture(&returnTexture);
+    btnenter.setTexture(&enterTexture);
     //sound
     sf::SoundBuffer mainmenuSound;
     if (!mainmenuSound.loadFromFile("sound/PUBG.ogg"))
@@ -174,6 +176,7 @@ int main()
                 sbtscore.setPosition(100, 250);
                 btnexit.setPosition(100, 350);
                 sbtexit.setPosition(100, 350);
+                btnenter.setPosition(200,555);
 
                 Vector2i mouse = Mouse::getPosition(window2);
                 printf("mousepos x= %.0f y= %.0f\n", (float)mouse.x, (float)mouse.y);
@@ -191,18 +194,21 @@ int main()
                     window2.draw(sbtnplay);
                     window2.draw(btnscore);
                     window2.draw(btnexit);
+                    window2.draw(btnenter);
                 }
                 else if (mouse.x > 105 and mouse.x < 340 and mouse.y >255 and mouse.y < 310)
                 {
                     window2.draw(btnplay);
                     window2.draw(sbtscore);
                     window2.draw(btnexit);
+                    window2.draw(btnenter);
                 }
                 else if (mouse.x > 105 and mouse.x < 285 and mouse.y > 355 and mouse.y < 410)
                 {
                     window2.draw(btnplay);
                     window2.draw(btnscore);
                     window2.draw(sbtexit);
+                    window2.draw(btnenter);
                 }
 
                 else
@@ -210,6 +216,7 @@ int main()
                     window2.draw(btnplay);
                     window2.draw(btnscore);
                     window2.draw(btnexit);
+                    window2.draw(btnenter);
                 }
                 playername.drawTo(window2);
                 window2.display();
