@@ -1,22 +1,47 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include<SFML/Graphics.hpp>
 #include"Game.h"
+#include"Textbox.h"
 #include<time.h>
+#include<string>
 #include<SFML/Audio.hpp>
+#include<iostream>
+#include<stdio.h>
+#include<algorithm>
+
 using namespace sf;
 using namespace std;
+
+
+
+//high score function
+void showHighScore(int x, int y, string word, sf::RenderWindow& window2, sf::Font* font)
+{
+    sf::Text text;
+    text.setFont(*font);
+    text.setPosition(x, y);
+    text.setString(word);
+    if (word == "HIGHSCORE")
+        text.setCharacterSize(40);
+    else
+        text.setCharacterSize(20);
+        window2.draw(text);
+
+}
+
 int main()
 {
+    Event event;
     
     Font font;
     char temp[255] = {};
     int score[6] = {};
     string name[6] = {};
-    vector <pair<int, string >> userScore;
+    vector <pair<int, string>> userScore;
     FILE* fp;
-    //high score
+    // high score
     {
-        font.loadFromFile("fonts/Blockbuster.ttf");
+        font.loadFromFile("fonts/HELLO.ttf");
         fp = fopen("States/Score.txt", "r");
         for (int i = 0; i < 5; i++)
         {
@@ -26,24 +51,29 @@ int main()
             userScore.push_back(make_pair(score[i], name[i]));
             //cout << temp << " " << score;
         }
+        ///////////////////----------------------------
+        name[5] = "teeee";
+        score[5] = 5;
+        ///////////////////----------------------------
+        userScore.push_back(make_pair(score[5], name[5]));
+        sort(userScore.begin(), userScore.end());
+        fclose(fp);
     }
-    /// /////
-    name[5] = "teeee";
-    score[5] = 5;
-    /////
-    userScore.push_back(make_pair(score[5], name[5]));
-    sort(userScore.begin(), userScore.end());
-    fclose(fp);
-
-
+     
+    //playernametextbox
+    Textbox playername(20, sf::Color::White, true);
+    playername.setFont(font);
+    playername.setPosition({ 400.0,550.0f });
+    playername.setlimit(true, 10);
+    //start game
     sf::RenderWindow window2(sf::VideoMode(800, 600), "WTF");
-    sf::CircleShape collision(100.f);
-    collision.setPosition({ 100.f,100.f });
-    collision.setFillColor(sf::Color::Red);
-
+    
+  
     //menu background
 
-    Texture btnplayTexture, backTexture,btnscoreTexture,btnexitTexture;
+    Texture btnplayTexture, backTexture, btnscoreTexture, btnexitTexture;
+    Texture returnTexture;
+
     RectangleShape btnplay(Vector2f(354.0f / 2, 95.0f / 1.5));
     RectangleShape sbtnplay(Vector2f(354.0f / 2 * 1.2, 95.0f / 1.5 * 1.2));
     RectangleShape btnscore(Vector2f(484.0f / 2, 97.0f / 1.5));
@@ -51,11 +81,14 @@ int main()
     RectangleShape btnexit(Vector2f(354.0f / 2, 94.0f / 1.5));
     RectangleShape sbtexit(Vector2f(354.0f / 2 * 1.2, 94.0f / 1.5 * 1.2));
     RectangleShape back(Vector2f(1400.0f, 700.0f));
-
+    RectangleShape btnreturn(Vector2f(556.0f / 8, 572.0f / 10)), sbtnreturn(Vector2f(556.0f / 8 * 1.2, 572.0f / 10 * 1.2));
+   
+    //load pic
     btnplayTexture.loadFromFile("pic/start.png");
     btnscoreTexture.loadFromFile("pic/score.png");
     btnexitTexture.loadFromFile("pic/exit.png");
     backTexture.loadFromFile("pic/eiei.jpg");
+    returnTexture.loadFromFile("pic/return.png");
 
     btnplay.setTexture(&btnplayTexture);
     sbtnplay.setTexture(&btnplayTexture);
@@ -64,24 +97,76 @@ int main()
     btnexit.setTexture(&btnexitTexture);
     sbtexit.setTexture(&btnexitTexture);
     back.setTexture(&backTexture);
-
+    btnreturn.setTexture(&returnTexture);
+    sbtnreturn.setTexture(&returnTexture);
     //sound
-    sf::Music mainmenuSound;
-    if (!mainmenuSound.openFromFile("sound/Battleship.ogg"))
+    sf::SoundBuffer mainmenuSound;
+    if (!mainmenuSound.loadFromFile("sound/PUBG.ogg"))
     {
         cout << "cant open music" << endl;
     }
-
-
+    sf::Sound mainmenuSong;
+    mainmenuSong.setLoop(true);
+    mainmenuSong.setBuffer(mainmenuSound);
+    mainmenuSong.play();
+    int state = 0;
     while (1)
     {
-        mainmenuSound.setLoop(true);
-        mainmenuSound.play();
-        bool state = 0;
+      
         std::cout << state << std::endl;
-        if (state == 0)
+        //// highscore
+        if (state == -1)
         {
-            
+            window2.clear(Color(150, 150, 150));
+            window2.draw(back);
+            Vector2i mouse = Mouse::getPosition(window2);
+            fopen("States/Score.txt", "w");
+            for (int i = 5; i >= 0; i--)
+            {
+                strcpy(temp, userScore[i].second.c_str());
+                fprintf(fp, "%s %d\n", temp, userScore[i].first);
+            }
+            fclose(fp);
+
+
+            showHighScore(550 , 150 - 20, "HIGHSCORE", window2, &font);
+
+            for (int i = 4; i >= 0; i--)
+            {
+
+                showHighScore(120, 190 + (5 - i) * 60, userScore[i].second, window2, &font);
+                showHighScore(700, 190 + (5 - i) * 60, to_string(userScore[i].first), window2, &font);
+            }
+
+            if (mouse.x > 0 and mouse.x < 60 and mouse.y>0 and mouse.y < 100)
+                window2.draw(sbtnreturn);
+            else
+                window2.draw(btnreturn);
+
+
+            window2.display();
+
+            if (mouse.x > 0 and mouse.x < 60 and mouse.y>0 and mouse.y < 100)
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+                    state = 0;
+        }
+            if (state == 0)
+            {
+
+                while (window2.pollEvent(event))
+                {
+                    switch (event.type)
+                    {
+                    case Event::Closed:
+                        window2.close();
+                        break;
+                    
+                    case sf::Event::TextEntered:
+                        playername.typeOn(event);
+
+
+                    }
+                }
 
                 btnplay.setPosition(100, 150);
                 sbtnplay.setPosition(100, 150);
@@ -107,7 +192,7 @@ int main()
                     window2.draw(btnscore);
                     window2.draw(btnexit);
                 }
-                else if(mouse.x >105 and mouse.x <340 and mouse.y >255 and mouse.y <310)
+                else if (mouse.x > 105 and mouse.x < 340 and mouse.y >255 and mouse.y < 310)
                 {
                     window2.draw(btnplay);
                     window2.draw(sbtscore);
@@ -119,14 +204,14 @@ int main()
                     window2.draw(btnscore);
                     window2.draw(sbtexit);
                 }
-              
+
                 else
                 {
                     window2.draw(btnplay);
                     window2.draw(btnscore);
                     window2.draw(btnexit);
                 }
-            
+                playername.drawTo(window2);
                 window2.display();
 
 
@@ -141,20 +226,33 @@ int main()
                         break;
                     }
                 }
+                if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+                {
+                    if ((mouse.x > 105 and mouse.x < 340 and mouse.y >255 and mouse.y < 310))
+
+                        state = -1;
+                    if ((mouse.x > 105 and mouse.x < 285 and mouse.y >355 and mouse.y < 410))
+                    {
+                        window2.close();
+                        break;
+                    }
+                }
                 //window2.close();
-                
+
             }
             if (state == 1)
             {
-
+                mainmenuSong.stop();
 
                 Game game;
                 game.run();
-
+                state = 0;
 
             }
+           
 
 
         }
         return 0;
     }
+

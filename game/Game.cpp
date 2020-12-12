@@ -72,6 +72,20 @@ void Game::initSystems()
 	this->points = 0;
 }
 
+void Game::initSound()
+{
+	this->music.openFromFile("sound/PUBG.ogg");
+	this->music.setVolume(25);
+
+	this->music.play();
+	this->music.setLoop(true);
+	if (!this->soundeffect.loadFromFile("sound/drow.ogg"))
+		throw"ERROR::GAME::FAILED_TO_LOAD_SOUND_EFFECT";
+
+	this->shooteffect.setBuffer(this->soundeffect);
+	this->shooteffect.setVolume(50);
+}
+
 void Game::initPlayer()
 {
 	this->player = new Player();
@@ -124,13 +138,7 @@ void Game::run()
 {
 	while (this->window->isOpen())
 	{
-		sf::Music ingameMusic;
-		if (!ingameMusic.openFromFile("sound/battleShip.ogg"))
-		{
-			std::cout << "In game musc error" << std::endl;
-		}
-		ingameMusic.setLoop(true);
-		ingameMusic.play();
+		
 		this->updatePollEvents();
 
 		if (this->player->getHp() > 0)
@@ -149,8 +157,9 @@ void Game::updatePollEvents()
 		if (e.Event::type == sf::Event::Closed)
 			this->window->close();
 		if (e.Event::KeyPressed && e.Event::key.code == sf::Keyboard::Escape){
-		this->window->close();
-		state = 1;
+			state = 0;
+			this->window->close();
+		
 		}
 	}
 }
@@ -170,18 +179,15 @@ void Game::updateInput()
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->player->canAttack())
 	{
-		Beep(200, 1);
-		    this->bullets.push_back(new Bullet(this->textures["BULLET"],
-
-			this->player->getPos().x + this->player->getBounds().width * 10 / 29.f,
-
-
-			this->player->getPos().y - this->player->getBounds().height * 10 / 125.f,0.f, -1.f, 5.f));
+		this->shooteffect.play();
+		this->bullets.push_back(new Bullet(this->textures["BULLET"],
+		this->player->getPos().x + this->player->getBounds().width * 10 / 29.f,
+		this->player->getPos().y - this->player->getBounds().height * 10 / 125.f,0.f, -1.f, 5.f));
 	}
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && this->player->canAttack())
 	{
-		Beep(200, 1);
+		this->shooteffect.play();
 		this->bullets.push_back(new Bullet(this->textures["BULLET"],
 
 			this->player->getPos().x + this->player->getBounds().width -15.f,

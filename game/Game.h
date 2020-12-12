@@ -7,6 +7,7 @@
 #include"Bullet.h"
 #include"Enemy.h"
 #include <Windows.h>
+#include<SFML/Audio.hpp>
 
 class Game
 {
@@ -16,8 +17,10 @@ private:
 	
 	sf::RenderWindow* window;
 
-
-
+	//sound
+	sf::SoundBuffer soundeffect;
+	sf::Sound shooteffect;
+	sf::Music music;
 
 
 
@@ -57,7 +60,7 @@ private:
 	void initGUI();
 	void initWorld();
 	void initSystems();
-	
+	void initSound();
 
 	void initPlayer();
 	void initEnemies();
