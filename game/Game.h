@@ -8,7 +8,6 @@
 #include"Enemy.h"
 #include <Windows.h>
 #include<SFML/Audio.hpp>
-#include"Item.h"
 
 class Game
 {
@@ -19,10 +18,11 @@ private:
 	sf::RenderWindow* window;
 
 	//sound
-	sf::SoundBuffer soundeffect;
-	sf::Sound shooteffect;
-	sf::Music music;
+	sf::SoundBuffer music;
+	sf::Sound sound;
 
+	sf::SoundBuffer seffect;
+	sf::Sound effect;
 	
 
 	//Resources
@@ -57,7 +57,7 @@ private:
 	//item
 	float itemsp;
 	float itemspMax;
-	std::vector<Item*>items;
+
 	std::vector<sf::Vector2f> itemPos;
 	std::vector<sf::Clock> itemTime;
 	//Private functions
@@ -68,7 +68,7 @@ private:
 	void initWorld();
 	void initSystems();
 	void initSound();
-
+	void initEffect();
 	void initPlayer();
 	void initEnemies();
 	void initItem();
@@ -94,6 +94,7 @@ public:
 
 	int point;
 	int wwk;
+	int kk_;
 	//update
 	void updatePollEvents();
 	void updateInput();
@@ -102,7 +103,7 @@ public:
 	void updateCollision();
 	void updateBullets();
 	void updateEnemies();
-	void updateItem();
+
 	void updateCombat();
 	void update();
 

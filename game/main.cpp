@@ -37,7 +37,7 @@ void showHighScore(int x, int y, string word, sf::RenderWindow& window2, sf::Fon
 int main()
 {
     Event event;
-  
+    
     string sname = "unknown";
     int sscore = 0;
     
@@ -74,13 +74,13 @@ int main()
     playername.setPosition({ 400.0,550.0f });
     playername.setlimit(true, 10);
     //start game
-    sf::RenderWindow window2(sf::VideoMode(800, 600), "WTF");
+    sf::RenderWindow window2(sf::VideoMode(800, 600), "mainmenu");
     
   
     //menu background
 
     Texture btnplayTexture, backTexture, btnscoreTexture, btnexitTexture;
-    Texture returnTexture, enterTexture;
+    Texture returnTexture, enterTexture, editorTexture;
 
     RectangleShape btnplay(Vector2f(354.0f / 2, 95.0f / 1.5));
     RectangleShape sbtnplay(Vector2f(354.0f / 2 * 1.2, 95.0f / 1.5 * 1.2));
@@ -91,6 +91,7 @@ int main()
     RectangleShape back(Vector2f(1400.0f, 700.0f));
     RectangleShape btnreturn(Vector2f(556.0f / 8, 572.0f / 10)), sbtnreturn(Vector2f(556.0f / 8 * 1.2, 572.0f / 10 * 1.2));
     RectangleShape btnenter(Vector2f(822.0f / 5, 69.0f / 5));
+    RectangleShape btneditor(Vector2f(675.0f/1.75 , 326.0f/1.75));
     //load pic
     btnplayTexture.loadFromFile("pic/start.png");
     btnscoreTexture.loadFromFile("pic/score.png");
@@ -98,7 +99,9 @@ int main()
     backTexture.loadFromFile("pic/eiei.jpg");
     returnTexture.loadFromFile("pic/return.png");
     enterTexture.loadFromFile("pic/Enter.png");
-    
+    editorTexture.loadFromFile("pic/name.png");
+   
+    btneditor.setTexture(&editorTexture);
     btnplay.setTexture(&btnplayTexture);
     sbtnplay.setTexture(&btnplayTexture);
     btnscore.setTexture(&btnscoreTexture);
@@ -118,7 +121,8 @@ int main()
     sf::Sound mainmenuSong;
     mainmenuSong.setLoop(true);
     mainmenuSong.setBuffer(mainmenuSound);
-    //mainmenuSong.play();
+    mainmenuSong.setVolume(10);
+    mainmenuSong.play();
     int state = 0;
     while (1)
     {
@@ -159,7 +163,7 @@ int main()
         }
             if (state == 0)
             {
-                mainmenuSong.play();
+                
                 while (window2.pollEvent(event))
                 {
                     switch (event.type)
@@ -183,6 +187,7 @@ int main()
                 btnexit.setPosition(100, 350);
                 sbtexit.setPosition(100, 350);
                 btnenter.setPosition(200,555);
+                btneditor.setPosition(400, 100);
 
                 Vector2i mouse = Mouse::getPosition(window2);
                 printf("mousepos x= %.0f y= %.0f\n", (float)mouse.x, (float)mouse.y);
@@ -201,6 +206,7 @@ int main()
                     window2.draw(btnscore);
                     window2.draw(btnexit);
                     window2.draw(btnenter);
+                    window2.draw(btneditor);
                 }
                 else if (mouse.x > 105 and mouse.x < 340 and mouse.y >255 and mouse.y < 310)
                 {
@@ -208,6 +214,7 @@ int main()
                     window2.draw(sbtscore);
                     window2.draw(btnexit);
                     window2.draw(btnenter);
+                    window2.draw(btneditor);
                 }
                 else if (mouse.x > 105 and mouse.x < 285 and mouse.y > 355 and mouse.y < 410)
                 {
@@ -215,6 +222,7 @@ int main()
                     window2.draw(btnscore);
                     window2.draw(sbtexit);
                     window2.draw(btnenter);
+                    window2.draw(btneditor);
                 }
 
                 else
@@ -223,6 +231,7 @@ int main()
                     window2.draw(btnscore);
                     window2.draw(btnexit);
                     window2.draw(btnenter);
+                    window2.draw(btneditor);
                 }
                 playername.drawTo(window2);
                 window2.display();
@@ -257,7 +266,7 @@ int main()
             }
             if (state == 1)
             {
-                mainmenuSong.pause();
+               mainmenuSong.pause();
 
                 Game game;
                 game.run();

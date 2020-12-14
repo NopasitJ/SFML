@@ -2,7 +2,7 @@
 
 void Enemy::initVariables()
 {
-	if (bbk==0) {
+
 		this->pointCount = rand() % 8 + 3; //min = 3 max = 10
 		this->type = 0;
 		this->speed = static_cast<float>(this->pointCount / 3);
@@ -10,32 +10,18 @@ void Enemy::initVariables()
 		this->hp = this->hpMax;
 		this->damage = this->pointCount * 2;
 		this->points = this->pointCount;
-		this->kk = 0;
-		this->shape.setRadius(this->pointCount * 5);
-		this->shape.setPointCount(this->pointCount);
-		this->shape.setFillColor(sf::Color(rand() % 255 + 1, rand() % 255 + 1, rand() % 255 + 1, 255));
+		
+		
 
-	}else if (bbk == 5) {
-		this->pointCount = rand() % 8 + 3; //min = 3 max = 10
-		this->type = 0;
-		this->speed = static_cast<float>(this->pointCount / 3);
-		this->hpMax = static_cast<int>(this->pointCount);
-		this->hp = this->hpMax;
-		this->damage = this->pointCount * 2;
-		this->points = this->pointCount;
-		this->kk = 1;//tem
-		this->shape.setRadius(this->pointCount * 5);
-		this->shape.setPointCount(this->pointCount);
-		this->shape.setFillColor(sf::Color(rand() % 255 + 1, rand() % 255 + 1, rand() % 255 + 1, 255));
-		this->resetbb();
 
-	}
 }
 
 void Enemy::initShape()
 {
 	
-		
+		this->shape.setRadius(this->pointCount * 5);
+		this->shape.setPointCount(this->pointCount);
+		this->shape.setFillColor(sf::Color(rand() % 255 + 1, rand() % 255 + 1, rand() % 255 + 1, 255));
 
 
 }
@@ -69,20 +55,6 @@ const int& Enemy::getDamage() const
 	return this->damage;
 }
 
-void Enemy::resetkk()
-{
-	kk = 0;
-}
-
-void Enemy::bb()
-{
-	this->bbk = this->bbk + 1;
-}
-
-void Enemy::resetbb()
-{
-	this->bbk = 0;
-}
 
 
 

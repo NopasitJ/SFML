@@ -22,20 +22,17 @@ private:
 public:
 	Enemy(float pos_x, float pos_y);
 	virtual ~Enemy();
-	int kk;
-	int bbk;
+
 	//Accessors
 	const sf::FloatRect getBounds() const;
 	const int& getPoints() const;
 	const int& getDamage() const;
-	void resetkk();
-	void bb();
-	void resetbb();
+
 
 	//Functions
 	void update();
 	void render(sf::RenderTarget* target);
 };
 
-#endif //!ENEMY_H
+#endif ENEMY_H
 

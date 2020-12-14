@@ -8,7 +8,7 @@ using namespace sf;
 //Private functions
 void Game::initWindow()
 {
-	this->window = new sf::RenderWindow(sf::VideoMode(800, 600), "Piw Shooter", sf::Style::Close | sf::Style::Titlebar);
+	this->window = new sf::RenderWindow(sf::VideoMode(800, 600), "bullet of galaxy", sf::Style::Close | sf::Style::Titlebar);
 	this->window->setFramerateLimit(144);
 	this->window->setVerticalSyncEnabled(false);
 }
@@ -74,16 +74,22 @@ void Game::initSystems()
 
 void Game::initSound()
 {
-	this->music.openFromFile("sound/PUBG.ogg");
-	this->music.setVolume(25);
+	if (!music.loadFromFile("sound/PUBG.ogg"))
+	{
+	}
+	sound.setBuffer(music);
+	sound.setLoop(true);
+	sound.play();
+	sound.setVolume(15);
+}
 
-	this->music.play();
-	this->music.setLoop(true);
-	if (!this->soundeffect.loadFromFile("sound/drow.ogg"))
-		throw"ERROR::GAME::FAILED_TO_LOAD_SOUND_EFFECT";
+void Game::initEffect()
+{
+	if (!seffect.loadFromFile("sound/drow.ogg"))
+	{
 
-	this->shooteffect.setBuffer(this->soundeffect);
-	this->shooteffect.setVolume(50);
+	}
+	
 }
 
 void Game::initPlayer()
@@ -97,10 +103,7 @@ void Game::initEnemies()
 	this->spawnTimer = this->spawnTimerMax;
 }
 
-void Game::initItem()
-{
-	this->items.push_back(new Item(500, 400));
-}
+
 
 
 
@@ -117,7 +120,8 @@ Game::Game()
 	this->initGUI();
 	this->initWorld();
 	this->initSystems();
-
+	this->initSound();
+	this->initEffect();
 	this->initPlayer();
 	this->initEnemies();
 }
@@ -190,7 +194,9 @@ void Game::updateInput()
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && this->player->canAttack())
 	{
-		this->shooteffect.play();
+		effect.setBuffer(seffect);
+		effect.play();
+		effect.setVolume(5);
 		this->bullets.push_back(new Bullet(this->textures["BULLET"],
 		this->player->getPos().x + this->player->getBounds().width * 10 / 29.f,
 		this->player->getPos().y - this->player->getBounds().height * 10 / 125.f,0.f, -1.f, 5.f));
@@ -198,7 +204,9 @@ void Game::updateInput()
 
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Right) && this->player->canAttack())
 	{
-		this->shooteffect.play();
+		effect.setBuffer(seffect);
+		effect.play();
+		effect.setVolume(5);
 		this->bullets.push_back(new Bullet(this->textures["BULLET"],
 
 			this->player->getPos().x + this->player->getBounds().width -15.f,
@@ -302,12 +310,14 @@ void Game::updateEnemies()
 		enemy->update();
 
 		//Bullet culling (top of screen)
-		if (enemy->getBounds().top > this->window->getSize().y&& enemy->kk==0)
+		if (enemy->getBounds().top > this->window->getSize().y)
 		{
 			//Delete enemy
 			delete this->enemies.at(counter);
 			this->enemies.erase(this->enemies.begin() + counter);
-			enli->bb();
+			
+			
+			
 		}
 		//Enemy player collision
 		else if (enemy->getBounds().intersects(this->player->getBounds()))
@@ -315,14 +325,6 @@ void Game::updateEnemies()
 			this->player->loseHp(this->enemies.at(counter)->getDamage());
 			delete this->enemies.at(counter);
 			this->enemies.erase(this->enemies.begin() + counter);
-		}else if (enemy->getBounds().top > this->window->getSize().y&&enemy->kk==1)
-		{
-			//Delete enemy
-			delete this->enemies.at(counter);
-			this->enemies.erase(this->enemies.begin() + counter);
-			wwk = (rand() % 3 + 2) * 10;
-			this->player->gainHp(wwk);
-			
 		}
 
 		++counter;
@@ -331,42 +333,7 @@ void Game::updateEnemies()
 
 
 
-void Game::updateItem()
-{
 
-	//Spawning
-	if (this->itemsp >= this->itemspMax)
-	{
-		this->items.push_back(new Item(0,0));
-		this->itemsp = 10.0f;
-	}
-
-	//Update
-	unsigned count = 0;
-	for (auto* item : this->items)
-	{
-		item->update();
-
-		//Bullet culling (top of screen)
-		if (item->getBounds().top > this->window->getSize().y)
-		{
-		//Delete item
-			delete this->items.at(count);
-			this->items.erase(this->items.begin() + count);
-		}
-		//item player collision
-		else if (item->getBounds().intersects(this->player->getBounds()))
-		{
-			/*this->itemPos.push_back(sf::Vector2f(this->items[i]->getPosition().x, this->items[i]->getPosition().y));
-			this->itemTime.push_back(sf::Clock());*/
-			this->player->gainHp(this->items.at(count)->getHealing());
-			delete this->items.at(count);
-			this->items.erase(this->items.begin() + count);
-		}
-
-		++count;
-	}
-}
 
 void Game::updateCombat()
 {
@@ -403,7 +370,6 @@ void Game::update()
 
 	this->updateEnemies();
 
-	this->updateItem();
 
 	this->updateCombat();
 
@@ -411,6 +377,7 @@ void Game::update()
 
 	this->updateWorld();
 
+	
 
 }
 
@@ -428,6 +395,7 @@ void Game::renderWorld()
 
 void Game::render()
 {
+	
 	this->window->clear();
 
 	//Draw world
@@ -445,10 +413,7 @@ void Game::render()
 	{
 		enemy->render(this->window);
 	}
-	for (auto* item : this->items)
-	{
-		item->render(this->window);
-	}
+	
 	this->renderGUI();
 
 	//Game over screen
@@ -456,5 +421,6 @@ void Game::render()
 		this->window->draw(this->gameOverText);
 
 	this->window->display();
+	
 }
 
