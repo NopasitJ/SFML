@@ -302,11 +302,12 @@ void Game::updateEnemies()
 		enemy->update();
 
 		//Bullet culling (top of screen)
-		if (enemy->getBounds().top > this->window->getSize().y)
+		if (enemy->getBounds().top > this->window->getSize().y&& enemy->kk==0)
 		{
 			//Delete enemy
 			delete this->enemies.at(counter);
 			this->enemies.erase(this->enemies.begin() + counter);
+			enli->bb();
 		}
 		//Enemy player collision
 		else if (enemy->getBounds().intersects(this->player->getBounds()))
@@ -314,6 +315,14 @@ void Game::updateEnemies()
 			this->player->loseHp(this->enemies.at(counter)->getDamage());
 			delete this->enemies.at(counter);
 			this->enemies.erase(this->enemies.begin() + counter);
+		}else if (enemy->getBounds().top > this->window->getSize().y&&enemy->kk==1)
+		{
+			//Delete enemy
+			delete this->enemies.at(counter);
+			this->enemies.erase(this->enemies.begin() + counter);
+			wwk = (rand() % 3 + 2) * 10;
+			this->player->gainHp(wwk);
+			
 		}
 
 		++counter;

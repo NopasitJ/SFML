@@ -23,7 +23,7 @@ private:
 	sf::Sound shooteffect;
 	sf::Music music;
 
-
+	
 
 	//Resources
 	std::map<std::string, sf::Texture*> textures;
@@ -75,6 +75,7 @@ private:
 	
 	//return points
 
+	Enemy* enli;
 	
 	
 	
@@ -91,7 +92,8 @@ public:
 	//core
 	void run();
 
-int point;
+	int point;
+	int wwk;
 	//update
 	void updatePollEvents();
 	void updateInput();

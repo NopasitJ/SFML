@@ -86,9 +86,13 @@ void Player::loseHp(const int value)
 
 void Player::gainHp(const int value)
 {
-	this->hp += value;
-	if (this->hp > 100)
-		this->hp = 0;
+	
+	if ((this->hp+value) > 100)
+		this->hp = 100;
+	else if((this-> hp+value) <= 100)
+		this->hp += value;
+		
+	
 }
 
 void Player::move(const float dirX, const float dirY)
