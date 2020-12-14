@@ -34,6 +34,7 @@ public:
 	void setPosition(const float x, const float y);
 	void setHp(const int hp);
 	void loseHp(const int value);
+	void gainHp(const int value);
 
 	void move(const float dirX, const float dirY);
 	const bool canAttack();

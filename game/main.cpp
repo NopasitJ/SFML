@@ -8,11 +8,16 @@
 #include<iostream>
 #include<stdio.h>
 #include<algorithm>
+#include<vector>
 
 using namespace sf;
 using namespace std;
 
-
+bool comp(const pair<int, string>& a, const pair<int, string>& b)
+   
+{
+    return (a.first > b.first);
+}
 
 //high score function
 void showHighScore(int x, int y, string word, sf::RenderWindow& window2, sf::Font* font)
@@ -32,31 +37,34 @@ void showHighScore(int x, int y, string word, sf::RenderWindow& window2, sf::Fon
 int main()
 {
     Event event;
+  
+    string sname = "unknown";
+    int sscore = 0;
     
     Font font;
-    char temp[255] = {};
+
     int score[6] = {};
     string name[6] = {};
+    char temp[255] = {};
+
     vector <pair<int, string>> userScore;
     FILE* fp;
     // high score
     {
         font.loadFromFile("fonts/HELLO.ttf");
-        fp = fopen("States/Score.txt", "r");
+        fp = fopen("states/Score.txt", "r");
         for (int i = 0; i < 5; i++)
         {
             fscanf(fp, "%s", &temp);
             name[i] = temp;
             fscanf(fp, "%d", &score[i]);
+           
             userScore.push_back(make_pair(score[i], name[i]));
-            //cout << temp << " " << score;
+            cout << temp << " " << score;
         }
-        ///////////////////----------------------------
-        name[5] = "teeee";
-        score[5] = 5;
-        ///////////////////----------------------------
-        userScore.push_back(make_pair(score[5], name[5]));
-        sort(userScore.begin(), userScore.end());
+        sort(userScore.begin(), userScore.end(),comp);
+
+       
         fclose(fp);
     }
      
@@ -114,30 +122,27 @@ int main()
     int state = 0;
     while (1)
     {
-      
-        std::cout << state << std::endl;
+      cout << userScore.size();
+        //std::cout << state << std::endl;
         //// highscore
+       
         if (state == -1)
         {
             window2.clear(Color(150, 150, 150));
             window2.draw(back);
             Vector2i mouse = Mouse::getPosition(window2);
-            fopen("States/Score.txt", "w");
-            for (int i = 5; i >= 0; i--)
-            {
-                strcpy(temp, userScore[i].second.c_str());
-                fprintf(fp, "%s %d\n", temp, userScore[i].first);
-            }
-            fclose(fp);
+
+            cout <<"mx = "<< mouse.x << "my = " << mouse.y<<endl;
+            
 
 
-            showHighScore(550 , 150 - 20, "HIGHSCORE", window2, &font);
-
-            for (int i = 4; i >= 0; i--)
+            showHighScore(550, 150 - 20, "HIGHSCORE", window2, &font);
+            
+            for (int i = 0; i < 5; i++)
             {
 
-                showHighScore(120, 190 + (5 - i) * 60, userScore[i].second, window2, &font);
-                showHighScore(700, 190 + (5 - i) * 60, to_string(userScore[i].first), window2, &font);
+                showHighScore(120, 190 + (1+  i) * 60, userScore[i].second, window2, &font);
+                showHighScore(700, 190 + (1+  i) * 60, to_string(userScore[i].first), window2, &font);
             }
 
             if (mouse.x > 0 and mouse.x < 60 and mouse.y>0 and mouse.y < 100)
@@ -162,13 +167,14 @@ int main()
                     case Event::Closed:
                         window2.close();
                         break;
-                    
+
                     case sf::Event::TextEntered:
                         playername.typeOn(event);
 
-
+                        
                     }
                 }
+                
 
                 btnplay.setPosition(100, 150);
                 sbtnplay.setPosition(100, 150);
@@ -225,8 +231,11 @@ int main()
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
                 {
                     if (mouse.x > 105 and mouse.x < 275 and mouse.y>150 and mouse.y < 210)
-
+                    {
                         state = 1;
+                        sname = playername.gettext();
+                        if (sname == "\0")sname = "Unknown";
+                    }
                     if (mouse.x > 105 and mouse.x < 285 and mouse.y > 355 and mouse.y < 410)
                     {
                         window2.close();
@@ -236,7 +245,6 @@ int main()
                 if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
                 {
                     if ((mouse.x > 105 and mouse.x < 340 and mouse.y >255 and mouse.y < 310))
-
                         state = -1;
                     if ((mouse.x > 105 and mouse.x < 285 and mouse.y >355 and mouse.y < 410))
                     {
@@ -253,7 +261,27 @@ int main()
 
                 Game game;
                 game.run();
+
+                sscore = game.point;
+               
+
+
+                userScore.push_back(make_pair(sscore, sname));
+
+                sort(userScore.begin(), userScore.end() ,comp);
+
+
+               
+                fp = fopen("states/Score.txt", "w");
+                for (int i = 0 ; i <5 ; i++)
+                {
+                    
+                    strcpy(temp, userScore[i].second.c_str());
+                    fprintf(fp, "%s %d\n", temp, userScore[i].first);
+                }
+                fclose(fp);
                 state = 0;
+
 
             }
            

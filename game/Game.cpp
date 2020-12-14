@@ -97,6 +97,17 @@ void Game::initEnemies()
 	this->spawnTimer = this->spawnTimerMax;
 }
 
+void Game::initItem()
+{
+	this->items.push_back(new Item(500, 400));
+}
+
+
+
+
+
+
+
 
 //Con/Des
 Game::Game()
@@ -213,6 +224,11 @@ void Game::updateGUI()
 
 	ss << "Points: " << this->points;
 
+
+	point = this->points;
+
+	std::cout << point << std::endl;
+
 	this->pointText.setString(ss.str());
 
 	//Update player GUI
@@ -304,6 +320,45 @@ void Game::updateEnemies()
 	}
 }
 
+
+
+void Game::updateItem()
+{
+
+	//Spawning
+	if (this->itemsp >= this->itemspMax)
+	{
+		this->items.push_back(new Item(0,0));
+		this->itemsp = 10.0f;
+	}
+
+	//Update
+	unsigned count = 0;
+	for (auto* item : this->items)
+	{
+		item->update();
+
+		//Bullet culling (top of screen)
+		if (item->getBounds().top > this->window->getSize().y)
+		{
+		//Delete item
+			delete this->items.at(count);
+			this->items.erase(this->items.begin() + count);
+		}
+		//item player collision
+		else if (item->getBounds().intersects(this->player->getBounds()))
+		{
+			/*this->itemPos.push_back(sf::Vector2f(this->items[i]->getPosition().x, this->items[i]->getPosition().y));
+			this->itemTime.push_back(sf::Clock());*/
+			this->player->gainHp(this->items.at(count)->getHealing());
+			delete this->items.at(count);
+			this->items.erase(this->items.begin() + count);
+		}
+
+		++count;
+	}
+}
+
 void Game::updateCombat()
 {
 	for (int i = 0; i < this->enemies.size(); ++i)
@@ -338,6 +393,8 @@ void Game::update()
 	this->updateBullets();
 
 	this->updateEnemies();
+
+	this->updateItem();
 
 	this->updateCombat();
 
@@ -379,7 +436,10 @@ void Game::render()
 	{
 		enemy->render(this->window);
 	}
-
+	for (auto* item : this->items)
+	{
+		item->render(this->window);
+	}
 	this->renderGUI();
 
 	//Game over screen

@@ -8,6 +8,7 @@
 #include"Enemy.h"
 #include <Windows.h>
 #include<SFML/Audio.hpp>
+#include"Item.h"
 
 class Game
 {
@@ -53,6 +54,12 @@ private:
 	float spawnTimerMax;
 	std::vector<Enemy*> enemies;
 
+	//item
+	float itemsp;
+	float itemspMax;
+	std::vector<Item*>items;
+	std::vector<sf::Vector2f> itemPos;
+	std::vector<sf::Clock> itemTime;
 	//Private functions
 	
 	void initWindow();
@@ -64,6 +71,12 @@ private:
 
 	void initPlayer();
 	void initEnemies();
+	void initItem();
+	
+	//return points
+
+	
+	
 	
 
 
@@ -72,13 +85,13 @@ public:
 	Game();
 	virtual ~Game();
 	bool state;
-
+	int rtScore;
 	//Functions
 
 	//core
 	void run();
 
-
+int point;
 	//update
 	void updatePollEvents();
 	void updateInput();
@@ -87,6 +100,7 @@ public:
 	void updateCollision();
 	void updateBullets();
 	void updateEnemies();
+	void updateItem();
 	void updateCombat();
 	void update();
 
