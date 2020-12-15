@@ -69,7 +69,7 @@ int main()
     }
      
     //playernametextbox
-    Textbox playername(20, sf::Color::White, true);
+    Textbox playername(30, sf::Color::White, true);
     playername.setFont(font);
     playername.setPosition({ 400.0,550.0f });
     playername.setlimit(true, 10);
@@ -80,7 +80,7 @@ int main()
     //menu background
 
     Texture btnplayTexture, backTexture, btnscoreTexture, btnexitTexture;
-    Texture returnTexture, enterTexture, editorTexture;
+    Texture returnTexture, enterTexture, editorTexture,headerTexture;
 
     RectangleShape btnplay(Vector2f(354.0f / 2, 95.0f / 1.5));
     RectangleShape sbtnplay(Vector2f(354.0f / 2 * 1.2, 95.0f / 1.5 * 1.2));
@@ -90,8 +90,9 @@ int main()
     RectangleShape sbtexit(Vector2f(354.0f / 2 * 1.2, 94.0f / 1.5 * 1.2));
     RectangleShape back(Vector2f(1400.0f, 700.0f));
     RectangleShape btnreturn(Vector2f(556.0f / 8, 572.0f / 10)), sbtnreturn(Vector2f(556.0f / 8 * 1.2, 572.0f / 10 * 1.2));
-    RectangleShape btnenter(Vector2f(822.0f / 5, 69.0f / 5));
-    RectangleShape btneditor(Vector2f(675.0f/1.75 , 326.0f/1.75));
+    RectangleShape btnenter(Vector2f(822.0f / 3, 69.0f / 3));
+    RectangleShape btneditor(Vector2f(675.0f/2.3 , 326.0f/2.3));
+    RectangleShape btnheader(Vector2f(293 , 289 / 1.3));
     //load pic
     btnplayTexture.loadFromFile("pic/start.png");
     btnscoreTexture.loadFromFile("pic/score.png");
@@ -99,7 +100,8 @@ int main()
     backTexture.loadFromFile("pic/eiei.jpg");
     returnTexture.loadFromFile("pic/return.png");
     enterTexture.loadFromFile("pic/Enter.png");
-    editorTexture.loadFromFile("pic/name.png");
+    editorTexture.loadFromFile("pic/name2.png");
+    headerTexture.loadFromFile("pic/head.png");
    
     btneditor.setTexture(&editorTexture);
     btnplay.setTexture(&btnplayTexture);
@@ -112,6 +114,7 @@ int main()
     btnreturn.setTexture(&returnTexture);
     sbtnreturn.setTexture(&returnTexture);
     btnenter.setTexture(&enterTexture);
+    btnheader.setTexture(&headerTexture);
     //sound
     sf::SoundBuffer mainmenuSound;
     if (!mainmenuSound.loadFromFile("sound/PUBG.ogg"))
@@ -186,9 +189,9 @@ int main()
                 sbtscore.setPosition(100, 250);
                 btnexit.setPosition(100, 350);
                 sbtexit.setPosition(100, 350);
-                btnenter.setPosition(200,555);
-                btneditor.setPosition(400, 100);
-
+                btnenter.setPosition(100,555);
+                btneditor.setPosition(400, 350);
+                btnheader.setPosition(400, 50);
                 Vector2i mouse = Mouse::getPosition(window2);
                 printf("mousepos x= %.0f y= %.0f\n", (float)mouse.x, (float)mouse.y);
 
@@ -207,6 +210,7 @@ int main()
                     window2.draw(btnexit);
                     window2.draw(btnenter);
                     window2.draw(btneditor);
+                    window2.draw(btnheader);
                 }
                 else if (mouse.x > 105 and mouse.x < 340 and mouse.y >255 and mouse.y < 310)
                 {
@@ -215,6 +219,7 @@ int main()
                     window2.draw(btnexit);
                     window2.draw(btnenter);
                     window2.draw(btneditor);
+                    window2.draw(btnheader);
                 }
                 else if (mouse.x > 105 and mouse.x < 285 and mouse.y > 355 and mouse.y < 410)
                 {
@@ -223,6 +228,7 @@ int main()
                     window2.draw(sbtexit);
                     window2.draw(btnenter);
                     window2.draw(btneditor);
+                    window2.draw(btnheader);
                 }
 
                 else
@@ -232,6 +238,7 @@ int main()
                     window2.draw(btnexit);
                     window2.draw(btnenter);
                     window2.draw(btneditor);
+                    window2.draw(btnheader);
                 }
                 playername.drawTo(window2);
                 window2.display();
